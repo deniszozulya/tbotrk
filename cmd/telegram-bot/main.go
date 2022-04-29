@@ -43,34 +43,32 @@ func main() {
 
         for update := range updates {
                 log.Printf("%+v\n", update)
-		
+
+                msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+
                 if update.PreCheckoutQuery != nil {
                         log.Println("Start precheck processing")
 
 			handlePreCheckoutQuery(bot, update)
 
+                        msg.Text = "Поздравляю! Заказ успешно создан"
+
                         log.Println("Finish precheck processing")
-			
-// 			msg.Text = "Поздравляю! Заказ успешно создан"
-		}
-		
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+		} else {
+                        switch update.Message.Command() {
+                        case "start":
+                                msg.Text = "Что умеет бот?\nЯ помогу быстро заказать еду и организую доставку"
+                        case "web_app_setup_main_button":
+                                msg.Text = "Серёжа молодец!"
+                        case "message":
+                                msg.Text = "message"
+                        default:
+                                msg.Text = "Я еще не обучен этой команде ;("
+                        }
 
-
-                // Extract the command from the Message.
-                switch update.Message.Command() {
-                case "start":
-                        msg.Text = "Что умеет бот?\nЯ помогу быстро заказать еду и организую доставку"
-                case "web_app_setup_main_button":
-                        msg.Text = "Серёжа молодец!"
-                case "message":
-                        msg.Text = "message"
-                default:
-                        msg.Text = "Я еще не обучен этой команде ;("
-                }
-
-                if _, err := bot.Send(msg); err != nil {
-                        log.Fatal(err)
+                        if _, err := bot.Send(msg); err != nil {
+                                log.Fatal(err)
+                        }
                 }
 
                 log.Println("Update finished")
