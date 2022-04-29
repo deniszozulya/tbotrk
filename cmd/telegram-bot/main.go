@@ -1,12 +1,14 @@
 package main
 
 import (
-        "log"
-        "net/http"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
 
-        "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
-        "main/cmd/telegram-bot/config"
+	"main/cmd/telegram-bot/config"
 )
 
 func main() {
@@ -48,6 +50,8 @@ func main() {
 
                 if update.PreCheckoutQuery != nil {
                         log.Println("Start precheck processing")
+
+                        fmt.Println(update)
 
 			handlePreCheckoutQuery(bot, update, update.ChatMember.Chat.ID)
 
