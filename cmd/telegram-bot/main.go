@@ -64,7 +64,7 @@ func main() {
                         case "message":
                                 msg.Text = "message"
                         default:
-                                msg.Text = "Я еще не обучен этой команде ;("
+                                // msg.Text = "Я еще не обучен этой команде ;("
                         }
 
                         if _, err := bot.Send(msg); err != nil {
@@ -89,7 +89,7 @@ func handlePreCheckoutQuery(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
 
         if ok := response.Ok; ok {
-                msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+                msg := tgbotapi.NewMessage(update.FromChat().ID, "")
 
                 msg.Text = "Заказ успешно создан!"
         }
