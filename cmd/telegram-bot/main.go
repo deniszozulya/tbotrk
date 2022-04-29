@@ -53,7 +53,7 @@ func main() {
 
                         log.Println("Finish precheck processing")
 			
-			msg = "Поздравляю! Заказ успешно создан"
+			msg.Text = "Поздравляю! Заказ успешно создан"
 		}
 
                 // Extract the command from the Message.
