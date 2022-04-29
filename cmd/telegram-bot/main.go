@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -50,7 +49,9 @@ func main() {
                 if update.PreCheckoutQuery != nil {
                         log.Println("Start precheck processing")
 
-                        fmt.Println(update)
+                        log.Println(update)
+                        
+                        log.Println(update.PreCheckoutQuery)
 
 			handlePreCheckoutQuery(bot, update, update.ChatMember.Chat.ID)
 
