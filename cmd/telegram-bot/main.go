@@ -53,6 +53,9 @@ func main() {
 		} else {
                         msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
+
+                        log.Println("Payment EVENT: ", update.Message.Command())
+
                         switch update.Message.Command() {
                         case "start":
                                 msg.Text = "Что умеет бот?\nЯ помогу быстро заказать еду и организую доставку"
