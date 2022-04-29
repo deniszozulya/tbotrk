@@ -44,9 +44,14 @@ func main() {
         for update := range updates {
                 log.Printf("%+v\n", update)
 
+                if update.PreCheckoutQuery != nil {
+                        log.Println("Start precheck processing")
 
-                // Create a new MessageConfig. We don't have text yet,
-                // so we leave it empty.
+			handlePreCheckoutQuery(bot, update)
+
+                        log.Println("Finish precheck processing")
+			return
+		}
 
                 msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
@@ -63,9 +68,22 @@ func main() {
                 }
 
                 if _, err := bot.Send(msg); err != nil {
-                        log.Panic(err)
+                        log.Fatal(err)
                 }
+
+                log.Println("Update finished")
         }
 
 
+}
+
+func handlePreCheckoutQuery(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+	pca := tgbotapi.PreCheckoutConfig{
+		OK:                 true,
+		PreCheckoutQueryID: update.PreCheckoutQuery.ID,
+	}
+	_, err := bot.Request(pca)
+	if err != nil {
+                log.Panic(err)
+        }
 }
