@@ -23,6 +23,7 @@ func main() {
 
         wh, _ := tgbotapi.NewWebhook(cfg.WHAddr + "/" + bot.Token)
 
+
         _, err = bot.Request(wh)
         if err != nil {
                 log.Fatal(err)
@@ -32,6 +33,7 @@ func main() {
         if err != nil {
                 log.Fatal(err)
         }
+        
 
         if info.LastErrorDate != 0 {
                 log.Printf("Telegram callback failed: %s", info.LastErrorMessage)
@@ -47,7 +49,7 @@ func main() {
                 if update.PreCheckoutQuery != nil {
                         log.Println("Start precheck processing")
 
-			handlePreCheckoutQuery(bot, update)
+			handlePreCheckoutQuery(bot, update, update.ChatMember.Chat.ID)
 
                         log.Println("Finish precheck processing")
 		} else {
@@ -78,7 +80,7 @@ func main() {
 
 }
 
-func handlePreCheckoutQuery(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func handlePreCheckoutQuery(bot *tgbotapi.BotAPI, update tgbotapi.Update, chatID int64) {
 	pca := tgbotapi.PreCheckoutConfig{
 		OK:                 true,
 		PreCheckoutQueryID: update.PreCheckoutQuery.ID,
@@ -89,7 +91,7 @@ func handlePreCheckoutQuery(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
         }
 
         if ok := response.Ok; ok {
-                msg := tgbotapi.NewMessage(update.FromChat().ID, "")
+                msg := tgbotapi.NewMessage(chatID, "")
 
                 msg.Text = "Заказ успешно создан!"
         }
