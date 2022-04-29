@@ -44,8 +44,6 @@ func main() {
         for update := range updates {
                 log.Printf("%+v\n", update)
 		
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-
                 if update.PreCheckoutQuery != nil {
                         log.Println("Start precheck processing")
 
@@ -53,8 +51,11 @@ func main() {
 
                         log.Println("Finish precheck processing")
 			
-			msg.Text = "Поздравляю! Заказ успешно создан"
+// 			msg.Text = "Поздравляю! Заказ успешно создан"
 		}
+		
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+
 
                 // Extract the command from the Message.
                 switch update.Message.Command() {
