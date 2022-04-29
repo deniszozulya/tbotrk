@@ -43,14 +43,6 @@ func main() {
 
         go http.ListenAndServe("0.0.0.0:80", nil)
 
-        // bot.on("message", (ctx) => {
-        //         if (ctx.update.message.successful_payment != undefined) {
-        //             ctx.reply('Thanks for the purchase!')
-        //         } else {
-        //             // Handle other message types, subtypes
-        //         }
-        //     })
-
         for update := range updates {
                 log.Printf("%+v\n", update)
 
@@ -60,27 +52,26 @@ func main() {
 			handlePreCheckoutQuery(bot, update)
 
                         log.Println("Finish precheck processing")
+		} else {
+                        msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
-                        continue
-		}
+                        log.Println("Payment EVENT: ", update.Message.Command())
+        
+                        switch update.Message.Command() {
+                        case "start":
+                                msg.Text = "Что умеет бот?\nЯ помогу быстро заказать еду и организую доставку"
+                        case "web_app_setup_main_button":
+                                msg.Text = "Серёжа молодец!"
+                        case "":
+                                msg.Text = "Заказ успешно создан!"
+                        default:
+                                //msg.Text = "Я еще не обучен этой команде ;("
+                        }
 
-                msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-
-                log.Println("Payment EVENT: ", update.Message.Command())
-
-                switch update.Message.Command() {
-                case "start":
-                        msg.Text = "Что умеет бот?\nЯ помогу быстро заказать еду и организую доставку"
-                case "web_app_setup_main_button":
-                        msg.Text = "Серёжа молодец!"
-                case "successful_payment":
-                        msg.Text = "Заказ успешно создан!"
-                default:
-                        //msg.Text = "Я еще не обучен этой команде ;("
-                }
-
-                if _, err := bot.Send(msg); err != nil {
-                        log.Fatal(err)
+                        
+                        if _, err := bot.Send(msg); err != nil {
+                                log.Fatal(err)
+                        }
                 }
 
                 log.Println("Update finished")
