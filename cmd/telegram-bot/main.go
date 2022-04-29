@@ -44,17 +44,15 @@ func main() {
         for update := range updates {
                 log.Printf("%+v\n", update)
 
-                msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-
                 if update.PreCheckoutQuery != nil {
                         log.Println("Start precheck processing")
 
 			handlePreCheckoutQuery(bot, update)
 
-                        msg.Text = "Поздравляю! Заказ успешно создан"
-
                         log.Println("Finish precheck processing")
 		} else {
+                        msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+
                         switch update.Message.Command() {
                         case "start":
                                 msg.Text = "Что умеет бот?\nЯ помогу быстро заказать еду и организую доставку"
