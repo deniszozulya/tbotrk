@@ -83,8 +83,14 @@ func handlePreCheckoutQuery(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 		OK:                 true,
 		PreCheckoutQueryID: update.PreCheckoutQuery.ID,
 	}
-	_, err := bot.Request(pca)
+	response, err := bot.Request(pca)
 	if err != nil {
                 log.Panic(err)
+        }
+
+        if ok := response.Ok; ok {
+                msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
+
+                msg.Text = "Заказ успешно создан!"
         }
 }
